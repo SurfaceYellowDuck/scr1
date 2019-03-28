@@ -122,6 +122,7 @@ export root_dir := $(shell pwd)
 export tst_dir  := $(root_dir)/sim/tests
 export inc_dir  := $(tst_dir)/common
 export bld_dir  := $(root_dir)/build/$(current_goal)_$(BUS)_$(CFG)_$(ARCH)_IPIC_$(IPIC)_TCM_$(TCM)_VIRQ_$(VECT_IRQ)_TRACE_$(TRACE)
+export tmp_dir  := $(root_dir)/temp
 
 test_results := $(bld_dir)/test_results.txt
 test_info    := $(bld_dir)/test_info
@@ -200,6 +201,15 @@ clean_test_list:
 echo_out: tests
 	@echo "                          Test               | build | simulation " ;
 	@echo "$$(cat $(test_results))"
+
+.PHONY: populate-coremark
+populate-coremark:
+	mkdir -p $(tmp_dir) && \
+        cd $(tmp_dir) && \
+        git clone https://github.com/eembc/coremark
+	test $(tst_dir)/benchmarks/coremark && \
+        mkdir -p $(tst_dir)/benchmarks/coremark/src && \
+        $(foreach f,core_main.c core_list_join.c coremark.h core_matrix.c core_state.c core_util.c,cp $(tmp_dir)/coremark/$(f) $(tst_dir)/benchmarks/coremark/src/;)
 
 tests: $(TARGETS)
 

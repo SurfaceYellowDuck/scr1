@@ -49,29 +49,32 @@ module scr1_dmi (
 // Debug Transport Module Status parameters
 //------------------------------------------------------------------------------
 
-localparam    DTMCS_RESERVEDB_HI = 5'd31;
-localparam    DTMCS_RESERVEDB_LO = 5'd18;
-localparam    DTMCS_DMIHARDRESET = 5'd17;
-localparam    DTMCS_DMIRESET     = 5'd16;
-localparam    DTMCS_RESERVEDA    = 5'd15;
-localparam    DTMCS_IDLE_HI      = 5'd14;
-localparam    DTMCS_IDLE_LO      = 5'd12;
-localparam    DTMCS_DMISTAT_HI   = 5'd11;
-localparam    DTMCS_DMISTAT_LO   = 5'd10;
-localparam    DTMCS_ABITS_HI     = 5'd9;
-localparam    DTMCS_ABITS_LO     = 5'd4;
-localparam    DTMCS_VERSION_HI   = 5'd3;
-localparam    DTMCS_VERSION_LO   = 5'd0;
+// DTMS
+localparam int                                         DTMCS_RESERVEDB_HI = 31;
+localparam int                                         DTMCS_RESERVEDB_LO = 18;
+localparam int                                         DTMCS_DMIHARDRESET = 17;
+localparam int                                         DTMCS_DMIRESET     = 16;
+localparam int                                         DTMCS_RESERVEDA    = 15;
+localparam int                                         DTMCS_IDLE_HI      = 14;
+localparam int                                         DTMCS_IDLE_LO      = 12;
+localparam int                                         DTMCS_DMISTAT_HI   = 11;
+localparam int                                         DTMCS_DMISTAT_LO   = 10;
+localparam int                                         DTMCS_ABITS_HI     = 9;
+localparam int                                         DTMCS_ABITS_LO     = 4;
+localparam int                                         DTMCS_VERSION_HI   = 3;
+localparam int                                         DTMCS_VERSION_LO   = 0;
+logic                                               dtmcs_dmihardreset_cmb;
+logic                                               dtmcs_dmireset_cmb;
 
 // Debug Module Interface parameters
 //------------------------------------------------------------------------------
 
-localparam    DMI_OP_LO   = 5'd0;
-localparam    DMI_OP_HI   = DMI_OP_LO   + SCR1_DBG_DMI_OP_WIDTH   - 1;
-localparam    DMI_DATA_LO = DMI_OP_HI   + 1;
-localparam    DMI_DATA_HI = DMI_DATA_LO + SCR1_DBG_DMI_DATA_WIDTH - 1;
-localparam    DMI_ADDR_LO = DMI_DATA_HI + 1;
-localparam    DMI_ADDR_HI = DMI_ADDR_LO + SCR1_DBG_DMI_ADDR_WIDTH - 1;
+localparam int                                         DMI_OP_LO   = 0;
+localparam int                                         DMI_OP_HI   = DMI_OP_LO + SCR1_DBG_DMI_OP_WIDTH - 1;
+localparam int                                         DMI_DATA_LO = DMI_OP_HI + 1;
+localparam int                                         DMI_DATA_HI = DMI_DATA_LO + SCR1_DBG_DMI_DATA_WIDTH - 1;
+localparam int                                         DMI_ADDR_LO = DMI_DATA_HI + 1;
+localparam int                                         DMI_ADDR_HI = DMI_ADDR_LO + SCR1_DBG_DMI_ADDR_WIDTH - 1;
 
 //------------------------------------------------------------------------------
 // Local signals declaration
