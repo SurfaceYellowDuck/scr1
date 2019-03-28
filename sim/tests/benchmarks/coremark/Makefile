@@ -15,7 +15,7 @@ c_src += core_list_join.c core_matrix.c core_main.c core_util.c core_state.c
 
 include $(inc_dir)/common.mk
 
-default: log_requested_tgt  $(bld_dir)/coremark.elf $(bld_dir)/coremark.hex $(bld_dir)/coremark.dump 
+default: log_requested_tgt  $(bld_dir)/coremark.elf $(bld_dir)/coremark.hex $(bld_dir)/coremark.dump
 
 log_requested_tgt:
 	echo coremark.hex>> $(bld_dir)/test_info

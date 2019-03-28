@@ -18,8 +18,8 @@
 // Parameters
 //==============================================================================
 //localparam int unsigned SCR1_HDU_DEBUGCSR_BASE_ADDR      = 12'h7B0;
-localparam int unsigned SCR1_HDU_DEBUGCSR_ADDR_SPAN      = SCR1_CSR_ADDR_HDU_MSPAN;
-localparam int unsigned SCR1_HDU_DEBUGCSR_ADDR_WIDTH     = $clog2(SCR1_HDU_DEBUGCSR_ADDR_SPAN);
+//localparam int unsigned SCR1_HDU_DEBUGCSR_ADDR_SPAN      = SCR1_CSR_ADDR_HDU_MSPAN;
+localparam int unsigned SCR1_HDU_DEBUGCSR_ADDR_WIDTH     = $clog2(SCR1_CSR_ADDR_HDU_MSPAN);
 localparam bit [3:0]    SCR1_HDU_DEBUGCSR_DCSR_XDEBUGVER = 4'h4;
 localparam int unsigned SCR1_HDU_PBUF_ADDR_SPAN          = 8;
 localparam int unsigned SCR1_HDU_PBUF_ADDR_WIDTH         = $clog2(SCR1_HDU_PBUF_ADDR_SPAN);
@@ -114,10 +114,10 @@ typedef struct packed {
 
 
 // Debug CSR map
-localparam SCR1_HDU_DBGCSR_OFFS_DCSR       = SCR1_HDU_DEBUGCSR_ADDR_WIDTH'( 'd0 );
-localparam SCR1_HDU_DBGCSR_OFFS_DPC        = SCR1_HDU_DEBUGCSR_ADDR_WIDTH'( 'd1 );
-localparam SCR1_HDU_DBGCSR_OFFS_DSCRATCH0  = SCR1_HDU_DEBUGCSR_ADDR_WIDTH'( 'd2 );
-localparam SCR1_HDU_DBGCSR_OFFS_DSCRATCH1  = SCR1_HDU_DEBUGCSR_ADDR_WIDTH'( 'd3 );
+localparam bit [SCR1_CSR_ADDR_WIDTH-1:0] SCR1_HDU_DBGCSR_OFFS_DCSR       = SCR1_CSR_ADDR_WIDTH'( 'd0 );
+localparam bit [SCR1_CSR_ADDR_WIDTH-1:0] SCR1_HDU_DBGCSR_OFFS_DPC        = SCR1_CSR_ADDR_WIDTH'( 'd1 );
+localparam bit [SCR1_CSR_ADDR_WIDTH-1:0] SCR1_HDU_DBGCSR_OFFS_DSCRATCH0  = SCR1_CSR_ADDR_WIDTH'( 'd2 );
+localparam bit [SCR1_CSR_ADDR_WIDTH-1:0] SCR1_HDU_DBGCSR_OFFS_DSCRATCH1  = SCR1_CSR_ADDR_WIDTH'( 'd3 );
 
 localparam bit [SCR1_CSR_ADDR_WIDTH-1:0] SCR1_HDU_DBGCSR_ADDR_DCSR      = SCR1_CSR_ADDR_HDU_MBASE + SCR1_HDU_DBGCSR_OFFS_DCSR;
 localparam bit [SCR1_CSR_ADDR_WIDTH-1:0] SCR1_HDU_DBGCSR_ADDR_DPC       = SCR1_CSR_ADDR_HDU_MBASE + SCR1_HDU_DBGCSR_OFFS_DPC;
