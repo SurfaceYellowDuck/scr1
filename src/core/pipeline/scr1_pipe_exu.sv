@@ -937,7 +937,7 @@ assign exu2csr_w_cmd_o   = exu_queue.csr_cmd;
 assign exu2csr_rw_addr_o = exu_queue.imm[SCR1_CSR_ADDR_WIDTH-1:0];
 assign exu2csr_w_data_o  = (exu_queue.csr_op == SCR1_CSR_OP_REG)
                          ? mprf2exu_rs1_data_i
-                         : {'0, exu_queue.rs1_addr}; // zimm
+                         : {(`SCR1_XLEN-$size(exu_queue.rs1_addr))'(0), exu_queue.rs1_addr}; // zimm
 
 
 // CSR access FSM

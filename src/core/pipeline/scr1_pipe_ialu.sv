@@ -64,7 +64,7 @@ localparam SCR1_MUL_WIDTH     = 32 / SCR1_MUL_STG_NUM;
 localparam SCR1_MUL_CNT_INIT  = 32'b1 << (`SCR1_XLEN/SCR1_MUL_WIDTH - 2);
 localparam SCR1_MDU_SUM_WIDTH = `SCR1_XLEN + SCR1_MUL_WIDTH;
  `endif // ~SCR1_FAST_MUL
-localparam SCR1_DIV_WIDTH     = 1;
+localparam int SCR1_DIV_WIDTH     = 1;
 localparam SCR1_DIV_CNT_INIT  = 32'b1 << (`SCR1_XLEN/SCR1_DIV_WIDTH - 2);
 `endif // SCR1_RVM_EXT
 
@@ -577,27 +577,27 @@ always_comb begin
             ialu2exu_main_res_o = main_sum_res[`SCR1_XLEN-1:0];
         end
         SCR1_IALU_CMD_SUB_LT : begin
-            ialu2exu_main_res_o = `SCR1_XLEN'(main_sum_flags.s ^ main_sum_flags.o);
+            ialu2exu_main_res_o = {{`SCR1_XLEN-1{1'b0}}, (main_sum_flags.s ^ main_sum_flags.o)};
             ialu2exu_cmp_res_o  = main_sum_flags.s ^ main_sum_flags.o;
         end
         SCR1_IALU_CMD_SUB_LTU : begin
-            ialu2exu_main_res_o = `SCR1_XLEN'(main_sum_flags.c);
+            ialu2exu_main_res_o = {{`SCR1_XLEN-1{1'b0}}, main_sum_flags.c};
             ialu2exu_cmp_res_o  = main_sum_flags.c;
         end
         SCR1_IALU_CMD_SUB_EQ : begin
-            ialu2exu_main_res_o = `SCR1_XLEN'(main_sum_flags.z);
+            ialu2exu_main_res_o = {{`SCR1_XLEN-1{1'b0}}, main_sum_flags.z};
             ialu2exu_cmp_res_o  = main_sum_flags.z;
         end
         SCR1_IALU_CMD_SUB_NE : begin
-            ialu2exu_main_res_o = `SCR1_XLEN'(~main_sum_flags.z);
+            ialu2exu_main_res_o = {{`SCR1_XLEN-1{1'b0}}, ~main_sum_flags.z};
             ialu2exu_cmp_res_o  = ~main_sum_flags.z;
         end
         SCR1_IALU_CMD_SUB_GE : begin
-            ialu2exu_main_res_o = `SCR1_XLEN'(~(main_sum_flags.s ^ main_sum_flags.o));
+            ialu2exu_main_res_o = {{`SCR1_XLEN-1{1'b0}}, ~(main_sum_flags.s ^ main_sum_flags.o)};
             ialu2exu_cmp_res_o  = ~(main_sum_flags.s ^ main_sum_flags.o);
         end
         SCR1_IALU_CMD_SUB_GEU : begin
-            ialu2exu_main_res_o = `SCR1_XLEN'(~main_sum_flags.c);
+            ialu2exu_main_res_o = {{`SCR1_XLEN-1{1'b0}}, ~main_sum_flags.c};
             ialu2exu_cmp_res_o  = ~main_sum_flags.c;
         end
         SCR1_IALU_CMD_SLL,
