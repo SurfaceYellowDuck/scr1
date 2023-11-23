@@ -1,4 +1,4 @@
-/// Copyright by Syntacore LLC © 2016-2021. See LICENSE for details
+/// Copyright by Syntacore LLC ï¿½ 2016-2021. See LICENSE for details
 /// @file       <scr1_pipe_hdu.sv>
 /// @brief      HART Debug Unit (HDU)
 ///
@@ -708,7 +708,7 @@ end
 
 always_ff @(negedge rst_n, posedge clk) begin
     if (~rst_n) begin
-        csr_dcsr_cause <= 1'b0;
+        csr_dcsr_cause <= '0;
     end else if(clk_en) begin
         if(csr_upd_on_halt) begin
             csr_dcsr_cause <= hart_haltstatus.cause;

@@ -114,7 +114,7 @@ always_comb begin
         tap_dr_rdata[DTMCS_RESERVEDA]                       = 'b0;
         tap_dr_rdata[DTMCS_IDLE_HI:DTMCS_IDLE_LO]           = 'b0;
         tap_dr_rdata[DTMCS_DMISTAT_HI:DTMCS_DMISTAT_LO]     = 'b0;
-        tap_dr_rdata[DTMCS_ABITS_HI  :DTMCS_ABITS_LO]       = SCR1_DBG_DMI_ADDR_WIDTH;
+        tap_dr_rdata[DTMCS_ABITS_HI  :DTMCS_ABITS_LO]       = (DTMCS_ABITS_HI-DTMCS_ABITS_LO+1)'(SCR1_DBG_DMI_ADDR_WIDTH);
         tap_dr_rdata[DTMCS_VERSION_LO]                      = 1'b1;
     end else begin
         tap_dr_rdata[DMI_ADDR_HI:DMI_ADDR_LO]               = 'b0;
