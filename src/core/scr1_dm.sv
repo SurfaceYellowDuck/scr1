@@ -183,8 +183,8 @@ localparam      ABSTRACTCS_RESERVEDB    = 1'd0;
 localparam      ABSTRACTCS_RESERVEDA    = 1'd0;
 localparam      ABSTRACTCS_DATACOUNT    = 4'd2;
 
-localparam      ABS_CMD_HARTREG         = 1'd0;
-localparam      ABS_CMD_HARTMEM         = 2'd2;
+localparam      ABS_CMD_HARTREG         = 8'd0;
+localparam      ABS_CMD_HARTMEM         = 8'd2;
 localparam      ABS_CMD_HARTREG_CSR     = 4'b0000;
 localparam      ABS_CMD_HARTREG_INTFPU  = 4'b0001;
 localparam      ABS_CMD_HARTREG_INT     = 7'b000_0000;
