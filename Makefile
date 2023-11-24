@@ -98,7 +98,8 @@ SIM_BUILD_OPTS ?=
 # Use this parameter to set the list of tests to run
 # TARGETS = <riscv_isa, riscv_compliance, riscv_arch, coremark, dhrystone21, hello, isr_sample>
 export TARGETS :=
-
+export RISCV_TESTS ?= $(tmp_dir)/riscv-tests
+export RISCV_COMPLIANCE_TESTS ?= $(tmp_dir)/riscv-compliance
 
 export XLEN  ?= 32
 export ABI   ?= ilp32
@@ -194,6 +195,22 @@ endif
 .PHONY: tests run_modelsim run_vcs run_ncsim run_verilator run_verilator_wf
 
 default: clean_test_list run_verilator
+
+.PHONY: populate-riscv_compliance
+populate-riscv_compliance:
+	mkdir -p $(tmp_dir) && \
+        cd $(tmp_dir) && \
+        git clone https://github.com/riscv/riscv-compliance && \
+        cd riscv-compliance && \
+        git checkout 9f280717f26f50833357db9bfb77a8c79835f162
+
+.PHONY: populate-riscv_isa
+populate-riscv_isa:
+	mkdir -p $(tmp_dir) && \
+        cd $(tmp_dir) && \
+        git clone https://github.com/riscv/riscv-tests && \
+        cd riscv-tests && \
+        git checkout a9433c4daa287fbe101025f2a079261a10149225
 
 clean_test_list:
 	rm -f $(test_info)
