@@ -102,12 +102,12 @@ parameter bit [SCR1_TDU_ICOUNT_RESERVEDB_HI-SCR1_TDU_ICOUNT_RESERVEDB_LO:0]
 
 parameter bit           SCR1_TDU_ICOUNT_RESERVEDA_VAL        = 1'b0;
 
-// CPU pipeline monitors
-typedef struct packed {
-    logic                                           vd;
-    logic                                           req;
-    logic [`SCR1_XLEN-1:0]                          addr;
-} type_scr1_brkm_instr_mon_s;
+//tbr // CPU pipeline monitors
+//tbr typedef struct packed {
+//tbr     logic                                           vd;
+//tbr     logic                                           req;
+//tbr     logic [`SCR1_XLEN-1:0]                          addr;
+//tbr } type_scr1_brkm_instr_mon_s;
 
 typedef struct packed {
     logic                                           vd;

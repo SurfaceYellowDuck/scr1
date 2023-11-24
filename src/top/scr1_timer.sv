@@ -62,7 +62,8 @@ logic                                               mtimecmphi_up;
 
 logic                                               dmem_req_valid;
 
-logic [3:0]                                         rtc_sync;
+logic                                               rtc_rtc;
+logic [3:1]                                         rtc_sync; // synchronizer for rtc_rtc
 logic                                               rtc_ext_pulse;
 logic [SCR1_TIMER_DIVIDER_WIDTH-1:0]                timeclk_cnt;
 logic                                               timeclk_cnt_en;
@@ -188,10 +189,10 @@ assign rtc_ext_pulse    = rtc_sync[3] ^ rtc_sync[2];
 
 always_ff @(negedge rst_n, posedge rtc_clk) begin
     if (~rst_n) begin
-        rtc_sync[0] <= 1'b0;
+        rtc_rtc <= 1'b0;
     end else begin
         if (timer_clksrc_rtc) begin
-            rtc_sync[0] <= ~rtc_sync[0];
+            rtc_rtc <= ~rtc_rtc;
         end
     end
 end
@@ -201,7 +202,7 @@ always_ff @(negedge rst_n, posedge clk) begin
         rtc_sync[3:1]   <= '0;
     end else begin
         if (timer_clksrc_rtc) begin
-            rtc_sync[3:1]   <= rtc_sync[2:0];
+            rtc_sync[3:1]   <= {rtc_sync[2:1], rtc_rtc};;
         end
     end
 end

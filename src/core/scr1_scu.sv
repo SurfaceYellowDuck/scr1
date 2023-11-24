@@ -151,10 +151,10 @@ logic                                       hdu_rst_n_status;
 logic                                       hdu_rst_n_status_sync;
 logic                                       hdu_rst_n_qlfy;
 
+
 // DM Reset signals
 logic                                       dm_rst_n_in;
 logic                                       dm_rst_n_status;
-
 //------------------------------------------------------------------------------
 // TAPC scan-chain i/f
 //------------------------------------------------------------------------------

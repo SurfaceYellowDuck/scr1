@@ -17,7 +17,7 @@ module scr1_cg (
 // For synthesis, it should be replaced by implementation-specific
 // clock gate code.
 
-logic latch_en;
+logic latch_en /*verilator clock_enable*/;
 
 always_latch begin
     if (~clk) begin
