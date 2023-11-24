@@ -138,7 +138,10 @@ module scr1_pipe_exu (
 
 `ifdef SCR1_TDU_EN
     // EXU <-> TDU interface
-    output type_scr1_brkm_instr_mon_s           exu2tdu_imon_o,             // Instruction monitor
+    //    output type_scr1_brkm_instr_mon_s           exu2tdu_i_mon,          // Instruction monitor
+    output logic                                exu2tdu_i_mon_vd,       // Instruction stream monitoring
+    output logic                                exu2tdu_i_mon_req,      // Instruction stream monitoring
+    output logic [`SCR1_XLEN-1:0]               exu2tdu_i_mon_addr,     // Instruction stream monitoring
     input  logic [SCR1_TDU_ALLTRIG_NUM-1:0]     tdu2exu_ibrkpt_match_i,     // Instruction breakpoint(s) match
     input  logic                                tdu2exu_ibrkpt_exc_req_i,   // Instruction breakpoint exception
     output type_scr1_brkm_lsu_mon_s             lsu2tdu_dmon_o,             // Data monitor
@@ -998,9 +1001,9 @@ assign exu2csr_mret_update_o = exu2csr_mret_instr_o & csr_access_init;
 //------------------------------------------------------------------------------
 
 // Instruction monitor
-assign exu2tdu_imon_o.vd    = exu_queue_vd;
-assign exu2tdu_imon_o.req   = exu2pipe_instret_o;
-assign exu2tdu_imon_o.addr  = pc_curr_ff;
+assign exu2tdu_i_mon_vd     = exu_queue_vd;
+assign exu2tdu_i_mon_req    = exu2pipe_instret_o;
+assign exu2tdu_i_mon_addr   = exu2pipe_pc_curr_o;
 
 always_comb begin
     exu2tdu_ibrkpt_ret_o = '0;

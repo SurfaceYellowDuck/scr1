@@ -57,8 +57,11 @@ logic           tck_fall_load;
 logic           tck_fall_reset;
 logic [3:0]     tck_divpos_sync;
 logic [3:0]     tck_divneg_sync;
-logic [2:0]     dmi_ch_capture_sync;
-logic [2:0]     dmi_ch_shift_sync;
+logic           dmi_ch_capture_tck;
+logic [2:1]     dmi_ch_capture_sync;
+logic           dmi_ch_shift_tck;
+logic [2:1]     dmi_ch_shift_sync;
+
 logic [2:0]     dmi_ch_tdi_sync;
 
 //-------------------------------------------------------------------------------
@@ -110,11 +113,11 @@ end
 
 always_ff @(negedge tapc_tck, negedge tapc_trst_n) begin
     if (~tapc_trst_n) begin
-        dmi_ch_capture_sync[0] <= '0;
-        dmi_ch_shift_sync[0]   <= '0;
+        dmi_ch_capture_tck <= '0;
+        dmi_ch_shift_tck   <= '0;
     end else begin
-        dmi_ch_capture_sync[0] <= tapc2tapcsync_ch_capture_i;
-        dmi_ch_shift_sync[0]   <= tapc2tapcsync_ch_shift_i;
+        dmi_ch_capture_tck <= tapc2tapcsync_ch_capture_i;
+        dmi_ch_shift_tck   <= tapc2tapcsync_ch_shift_i;
     end
 end
 
@@ -123,8 +126,8 @@ always_ff @(posedge clk, negedge pwrup_rst_n) begin
         dmi_ch_capture_sync[2:1] <= '0;
         dmi_ch_shift_sync[2:1]   <= '0;
     end else begin
-        dmi_ch_capture_sync[2:1] <= {dmi_ch_capture_sync[1], dmi_ch_capture_sync[0]};
-        dmi_ch_shift_sync[2:1]   <= {dmi_ch_shift_sync[1], dmi_ch_shift_sync[0]};
+        dmi_ch_capture_sync[2:1] <= {dmi_ch_capture_sync[1], dmi_ch_capture_tck};
+        dmi_ch_shift_sync[2:1]   <= {dmi_ch_shift_sync[1], dmi_ch_shift_tck};
     end
 end
 

@@ -9,12 +9,12 @@
 //-------------------------------------------------------------------------------
 // Local types declaration
 //-------------------------------------------------------------------------------
-typedef struct {
+typedef struct packed {
     logic       vd;
     logic       idx;
 } type_scr1_search_one_2_s;
 
-typedef struct {
+typedef struct packed {
     logic           vd;
     logic [4:0]     idx;
 } type_scr1_search_one_32_s;
