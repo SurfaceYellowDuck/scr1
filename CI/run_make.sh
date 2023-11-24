@@ -7,6 +7,6 @@ if [ -e $path_ ];
 	cd ..
 	git submodule update --init --recursive
 	make
-else echo "You don't have a tulchain"; fi;
+else echo "You don't have a toolchain"; fi;
 
 
