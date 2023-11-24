@@ -5,6 +5,7 @@ if [ -e $path_ ];
 	dir_path=$(dirname "$path_")
 	export PATH="$PATH:$dir_path"
 	cd ..
+	git submodule update --init --recursive
 	make
 else echo "You don't have a tulchain"; fi;
 
