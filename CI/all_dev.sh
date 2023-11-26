@@ -1,5 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 set -e
-./verilator_install.sh
-./run_make.sh
-./run_verilator_lint.sh
+./CI/verilator_install.sh
+./CI/run_make.sh
+./CI/run_verilator_lint.sh
+./CI/run_lint_shell_scripts.sh
