@@ -13,12 +13,12 @@ jobs:
         uses: actions/checkout@v4
       - name: install deps
         run: |
-          sudo apt-get install git help2man perl python3 make autoconf g++ flex bison ccache \
-          sudo apt-get install libgoogle-perftools-dev numactl perl-doc \
-          sudo apt-get install libfl2 \
-          sudo apt-get install libfl-dev \
-          sudo apt-get install zlibc zlib1g zlib1g-dev \
-          sudo apt-get install shellcheck \
+          sudo apt-get install git help2man perl python3 make autoconf g++ flex bison ccache 
+          sudo apt-get install libgoogle-perftools-dev numactl perl-doc 
+          sudo apt-get install libfl2 
+          sudo apt-get install libfl-dev 
+          sudo apt-get install zlibc zlib1g zlib1g-dev 
+          sudo apt-get install shellcheck 
       - name: run all
         run: |
           ./CI/all.sh
