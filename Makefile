@@ -98,7 +98,8 @@ SIM_BUILD_OPTS ?=
 # Use this parameter to set the list of tests to run
 # TARGETS = <riscv_isa, riscv_compliance, riscv_arch, coremark, dhrystone21, hello, isr_sample>
 export TARGETS :=
-
+export RISCV_TESTS ?= $(tmp_dir)/riscv-tests
+export RISCV_COMPLIANCE_TESTS ?= $(tmp_dir)/riscv-compliance
 
 export XLEN  ?= 32
 export ABI   ?= ilp32
@@ -122,6 +123,7 @@ export root_dir := $(shell pwd)
 export tst_dir  := $(root_dir)/sim/tests
 export inc_dir  := $(tst_dir)/common
 export bld_dir  := $(root_dir)/build/$(current_goal)_$(BUS)_$(CFG)_$(ARCH)_IPIC_$(IPIC)_TCM_$(TCM)_VIRQ_$(VECT_IRQ)_TRACE_$(TRACE)
+export tmp_dir  := $(root_dir)/temp
 
 test_results := $(bld_dir)/test_results.txt
 test_info    := $(bld_dir)/test_info
@@ -194,12 +196,37 @@ endif
 
 default: clean_test_list run_verilator
 
+.PHONY: populate-riscv_compliance
+populate-riscv_compliance:
+	mkdir -p $(tmp_dir) && \
+        cd $(tmp_dir) && \
+        git clone https://github.com/riscv/riscv-compliance && \
+        cd riscv-compliance && \
+        git checkout 9f280717f26f50833357db9bfb77a8c79835f162
+
+.PHONY: populate-riscv_isa
+populate-riscv_isa:
+	mkdir -p $(tmp_dir) && \
+        cd $(tmp_dir) && \
+        git clone https://github.com/riscv/riscv-tests && \
+        cd riscv-tests && \
+        git checkout a9433c4daa287fbe101025f2a079261a10149225
+
 clean_test_list:
 	rm -f $(test_info)
 
 echo_out: tests
 	@echo "                          Test               | build | simulation " ;
 	@echo "$$(cat $(test_results))"
+
+.PHONY: populate-coremark
+populate-coremark:
+	mkdir -p $(tmp_dir) && \
+        cd $(tmp_dir) && \
+        git clone https://github.com/eembc/coremark
+	test $(tst_dir)/benchmarks/coremark && \
+        mkdir -p $(tst_dir)/benchmarks/coremark/src && \
+        $(foreach f,core_main.c core_list_join.c coremark.h core_matrix.c core_state.c core_util.c,cp $(tmp_dir)/coremark/$(f) $(tst_dir)/benchmarks/coremark/src/;)
 
 tests: $(TARGETS)
 

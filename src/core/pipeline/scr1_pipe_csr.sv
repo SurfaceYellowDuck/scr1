@@ -88,7 +88,7 @@ module scr1_pipe_csr (
 
 `ifdef SCR1_IPIC_EN
     // CSR <-> IPIC interface
-    output  logic                                       csr2ipic_r_req_o,           // IPIC read request
+    output  logic                                       csr2ipic_r_req_o /*verilator isolate_assignments*/,         // IPIC read request
     output  logic                                       csr2ipic_w_req_o,           // IPIC write request
     output  logic [2:0]                                 csr2ipic_addr_o,            // IPIC address
     output  logic [`SCR1_XLEN-1:0]                      csr2ipic_wdata_o,           // IPIC write data
@@ -262,16 +262,16 @@ logic                                               csr_tirq_pnd_en;    // Timer
 
 // Exception flags
 logic                                               csr_w_exc;
-logic                                               csr_r_exc;
+logic                                               csr_r_exc /*verilator isolate_assignments*/;
 logic                                               exu_req_no_exc;
 
 // Requests to other modules
 logic                                               csr_ipic_req;
 `ifdef SCR1_DBG_EN
-logic                                               csr_hdu_req;
+logic                                               csr_hdu_req /*verilator isolate_assignments*/;
 `endif // SCR1_DBG_EN
 `ifdef SCR1_TDU_EN
-logic                                               csr_brkm_req;
+logic                                               csr_brkm_req /*verilator isolate_assignments*/;
 `endif // SCR1_TDU_EN
 
 //------------------------------------------------------------------------------

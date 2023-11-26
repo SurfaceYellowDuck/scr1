@@ -35,13 +35,13 @@ endif
 default: build_modelsim
 
 build_modelsim: $(sv_list)
-	cd $(bld_dir); \
-	vlib work; \
-	vmap work work; \
+	cd $(bld_dir) && \
+	vlib work; && \
+	vmap work work; && \
 	vlog -work work -O1 -mfcu -sv \
 	+incdir+$(rtl_inc_dir) \
 	+incdir+$(rtl_inc_tb_dir) \
-	+nowarnSVCHK  \
+	+nowarnSVCHK \
 	+define+SCR1_TRGT_SIMULATION \
 	+define+$(SIM_TRACE_DEF) \
 	+define+$(SIM_CFG_DEF) \
@@ -49,7 +49,7 @@ build_modelsim: $(sv_list)
 	$(sv_list)
 
 build_vcs: $(sv_list)
-	cd $(bld_dir); \
+	cd $(bld_dir) && \
 	vcs \
 	-full64 \
 	-lca \
@@ -68,7 +68,7 @@ build_vcs: $(sv_list)
 	$(sv_list)
 
 build_ncsim: $(sv_list)
-	cd $(bld_dir); \
+	cd $(bld_dir) && \
 	irun \
 	-elaborate \
 	-64bit \
@@ -86,7 +86,7 @@ build_ncsim: $(sv_list)
 	-top $(top_module)
 
 build_verilator: $(sv_list)
-	cd $(bld_dir); \
+	cd $(bld_dir) && \
 	verilator \
 	-cc \
 	-sv \
@@ -103,12 +103,12 @@ build_verilator: $(sv_list)
 	-I$(rtl_inc_dir) \
 	-I$(rtl_inc_tb_dir) \
 	$(SIM_BUILD_OPTS) \
-	$(sv_list); \
-	cd verilator; \
+	$(sv_list);
+	cd $(bld_dir)/verilator && \
 	$(MAKE) -f V$(top_module).mk;
 
 build_verilator_wf: $(sv_list)
-	cd $(bld_dir); \
+	cd $(bld_dir) && \
 	verilator \
 	-cc \
 	-sv \
@@ -127,12 +127,12 @@ build_verilator_wf: $(sv_list)
 	--trace-params \
     --trace-structs \
     --trace-underscore \
-	--Mdir $(bld_dir)/verilator \
+    --Mdir $(bld_dir)/verilator \
 	-I$(rtl_inc_dir) \
 	-I$(rtl_inc_tb_dir) \
 	$(SIM_BUILD_OPTS) \
-	$(sv_list); \
-	cd verilator; \
+	$(sv_list); 
+	cd $(bld_dir)/verilator && \
 	$(MAKE) -f V$(top_module).mk;
 
 

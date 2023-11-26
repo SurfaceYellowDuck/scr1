@@ -58,12 +58,12 @@ module scr1_ipic
 //-------------------------------------------------------------------------------
 // Local types declaration
 //-------------------------------------------------------------------------------
-typedef struct {
+typedef struct packed {
     logic                                   vd;
     logic                                   idx;
 } type_scr1_search_one_2_s;
 
-typedef struct {
+typedef struct packed {
     logic                                   vd;
     logic   [SCR1_IRQ_IDX_WIDTH-1:0]        idx;
 } type_scr1_search_one_16_s;
@@ -136,7 +136,7 @@ begin
 
     // Stage 4
     result.vd = |stage3_vd;
-    result.idx = (stage3_vd[0]) ? {1'b0, stage3_idx[0]} : {1'b1, stage3_idx[1]};
+    result.idx = (stage3_vd[0]) ? {(SCR1_IRQ_VECT_WIDTH-$size(stage3_idx[0]))'(0), stage3_idx[0]} : {(SCR1_IRQ_VECT_WIDTH-$size(stage3_idx[1]))'(1), stage3_idx[1]};
 
     return result;
 end

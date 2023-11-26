@@ -42,7 +42,7 @@ $(bld_dir)/%.elf: $(obj_dir)/%.o | $(obj_dir)
 	$(RISCV_GCC) $^ $(LDFLAGS) -o $@
 
 $(bld_dir)/%.hex: $(bld_dir)/%.elf
-	$(RISCV_OBJCOPY) $^ $@
+	$(RISCV_OBJCOPY) -O verilog  $^ $@
 
 $(bld_dir)/%.dump: $(bld_dir)/%.elf
 	$(RISCV_OBJDUMP) -D -w -x -S $^ > $@

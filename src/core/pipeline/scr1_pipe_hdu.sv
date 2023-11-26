@@ -1,4 +1,4 @@
-/// Copyright by Syntacore LLC © 2016-2021. See LICENSE for details
+/// Copyright by Syntacore LLC ï¿½ 2016-2021. See LICENSE for details
 /// @file       <scr1_pipe_hdu.sv>
 /// @brief      HART Debug Unit (HDU)
 ///
@@ -99,10 +99,10 @@ module scr1_pipe_hdu #(parameter HART_PBUF_INSTR_REGOUT_EN = 1'b1) (
     output  logic                                       hdu2exu_dmode_sstep_en_o,   // Enable single-step
 
     // HART state
-    output  logic                                       hdu2exu_dbg_halted_o,       // Debug halted state
+    output  logic                                       hdu2exu_dbg_halted_o /*verilator isolate_assignments*/, // Debug halted state
     output  logic                                       hdu2exu_dbg_run2halt_o,     // Transition to debug halted state
     output  logic                                       hdu2exu_dbg_halt2run_o,     // Transition to run state
-    output  logic                                       hdu2exu_dbg_run_start_o,    // First cycle of run state
+    output  logic                                       hdu2exu_dbg_run_start_o /*verilator isolate_assignments*/,    // First cycle of run state
 
     // PC interface
     input  logic [`SCR1_XLEN-1:0]                       pipe2hdu_pc_curr_i,         // Current PC
@@ -111,8 +111,8 @@ module scr1_pipe_hdu #(parameter HART_PBUF_INSTR_REGOUT_EN = 1'b1) (
     // HDU <-> IFU i/f
     // Program Buffer Instruction interface
     input   logic                                       ifu2hdu_pbuf_instr_rdy_i,   // Program Buffer Instruction i/f ready
-    output  logic                                       hdu2ifu_pbuf_instr_vd_o,    // Program Buffer Instruction valid
-    output  logic                                       hdu2ifu_pbuf_instr_err_o,   // Program Buffer Instruction i/f error
+    output  logic                                       hdu2ifu_pbuf_instr_vd_o /*verilator isolate_assignments*/,    // Program Buffer Instruction valid
+    output  logic                                       hdu2ifu_pbuf_instr_err_o /*verilator isolate_assignments*/,   // Program Buffer Instruction i/f error
     output  logic [SCR1_HDU_CORE_INSTR_WIDTH-1:0]       hdu2ifu_pbuf_instr_o        // Program Buffer Instruction itself
 );
 
@@ -708,7 +708,7 @@ end
 
 always_ff @(negedge rst_n, posedge clk) begin
     if (~rst_n) begin
-        csr_dcsr_cause <= 1'b0;
+        csr_dcsr_cause <= '0;
     end else if(clk_en) begin
         if(csr_upd_on_halt) begin
             csr_dcsr_cause <= hart_haltstatus.cause;

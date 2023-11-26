@@ -434,6 +434,9 @@ always_ff @(posedge clk, negedge rst_n) begin
                 q_data[SCR1_IFU_QUEUE_ADR_W'(q_wptr + 1'b1)]  <= imem_rdata_hi;
                 q_err [SCR1_IFU_QUEUE_ADR_W'(q_wptr + 1'b1)]  <= imem_resp_er;
             end
+            default:begin
+                // makes the registers keep their value
+            end
         endcase
     end
 end
@@ -447,7 +450,7 @@ assign q_err_next  = q_err  [SCR1_IFU_QUEUE_ADR_W'(q_rptr + 1'b1)];
 //------------------------------------------------------------------------------
 
 assign q_ocpd_h         = SCR1_IFU_Q_FREE_H_W'(q_wptr - q_rptr);
-assign q_free_h_next    = SCR1_IFU_Q_FREE_H_W'(SCR1_IFU_Q_SIZE_HALF - (q_wptr - q_rptr_next));
+assign q_free_h_next    = SCR1_IFU_Q_FREE_H_W'(SCR1_IFU_Q_SIZE_HALF) - (q_wptr - q_rptr_next);
 assign q_free_w_next    = SCR1_IFU_Q_FREE_W_W'(q_free_h_next >> 1'b1);
 
 assign q_is_empty       = (q_rptr == q_wptr);
@@ -691,8 +694,8 @@ end
 always_comb begin
     case (instr_bypass_type)
         SCR1_BYPASS_RVC            : begin
-            ifu2idu_instr_o = `SCR1_IMEM_DWIDTH'(new_pc_unaligned_ff ? imem_rdata_hi
-                                                                     : imem_rdata_lo);
+            ifu2idu_instr_o = {(`SCR1_IMEM_DWIDTH-16)'(0), new_pc_unaligned_ff ? imem_rdata_hi
+                                                                     : imem_rdata_lo};
         end
         SCR1_BYPASS_RVI_RDATA      : begin
             ifu2idu_instr_o = imem2ifu_rdata_i;
@@ -701,7 +704,7 @@ always_comb begin
             ifu2idu_instr_o = {imem_rdata_lo, q_data_head};
         end
         default                    : begin
-            ifu2idu_instr_o = `SCR1_IMEM_DWIDTH'(q_head_is_rvc ? q_data_head
+            ifu2idu_instr_o = (q_head_is_rvc ? {(`SCR1_IMEM_DWIDTH/2)'(0), q_data_head}
                                                                : {q_data_next, q_data_head});
         end
     endcase // instr_bypass_type

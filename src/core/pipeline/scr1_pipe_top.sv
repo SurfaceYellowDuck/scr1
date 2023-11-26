@@ -205,7 +205,10 @@ logic                                       csr2tdu_req_qlfy;      //     Reques
  `endif // SCR1_DBG_EN
 
 // EXU/LSU <-> TDU
-type_scr1_brkm_instr_mon_s                  exu2tdu_i_mon;         // Instruction monitor
+//tbr type_scr1_brkm_instr_mon_s                  exu2tdu_i_mon;         // Instruction monitor
+logic                                       exu2tdu_i_mon_vd;       // Instruction stream monitoring
+logic                                       exu2tdu_i_mon_req;      // Instruction stream monitoring
+logic [`SCR1_XLEN-1:0]                      exu2tdu_i_mon_addr;     // Instruction stream monitoring
 type_scr1_brkm_lsu_mon_s                    lsu2tdu_d_mon;         // Data monitor
 logic [SCR1_TDU_ALLTRIG_NUM-1:0]            tdu2exu_i_match;       // Instruction breakpoint(s) match
 logic [SCR1_TDU_MTRIG_NUM-1:0]              tdu2lsu_d_match;       // Data breakpoint(s) match
@@ -216,7 +219,10 @@ logic [SCR1_TDU_ALLTRIG_NUM-1:0]            exu2tdu_bp_retire;     // Instructio
  `ifdef SCR1_DBG_EN
                                                                     // Qualified TDU input signals from pipe_rst_n
                                                                     // reset domain:
-type_scr1_brkm_instr_mon_s                  exu2tdu_i_mon_qlfy;         // Instruction monitor
+//tbr type_scr1_brkm_instr_mon_s                  exu2tdu_i_mon_qlfy;         // Instruction monitor
+logic                                       exu2tdu_i_mon_qlfy_vd;       // Instruction stream monitoring
+logic                                       exu2tdu_i_mon_qlfy_req;      // Instruction stream monitoring
+logic [`SCR1_XLEN-1:0]                      exu2tdu_i_mon_qlfy_addr;     // Instruction stream monitoring
 type_scr1_brkm_lsu_mon_s                    lsu2tdu_d_mon_qlfy;         // Data monitor
 logic [SCR1_TDU_ALLTRIG_NUM-1:0]            exu2tdu_bp_retire_qlfy;     // Instruction with breakpoint flag retire
  `endif // SCR1_DBG_EN
@@ -437,7 +443,10 @@ scr1_pipe_exu i_pipe_exu (
 
 `ifdef SCR1_TDU_EN
     // EXU <-> TDU interface
-    .exu2tdu_imon_o                 (exu2tdu_i_mon           ),
+    //tbr .exu2tdu_imon_o                 (exu2tdu_i_mon           ),
+    .exu2tdu_i_mon_vd       (exu2tdu_i_mon_vd     ),
+    .exu2tdu_i_mon_req      (exu2tdu_i_mon_req    ),
+    .exu2tdu_i_mon_addr     (exu2tdu_i_mon_addr   ),
     .tdu2exu_ibrkpt_match_i         (tdu2exu_i_match         ),
     .tdu2exu_ibrkpt_exc_req_i       (tdu2exu_i_x_req         ),
     .lsu2tdu_dmon_o                 (lsu2tdu_d_mon           ),
@@ -631,9 +640,15 @@ scr1_pipe_tdu i_pipe_tdu (
 
     // TDU <-> EXU interface
  `ifdef SCR1_DBG_EN
-    .exu2tdu_imon_i             (exu2tdu_i_mon_qlfy    ),
+//tbr    .exu2tdu_imon_i             (exu2tdu_i_mon_qlfy    ),
+    .exu2tdu_i_mon_vd       (exu2tdu_i_mon_qlfy_vd  ),
+    .exu2tdu_i_mon_req      (exu2tdu_i_mon_qlfy_req ),
+    .exu2tdu_i_mon_addr     (exu2tdu_i_mon_qlfy_addr),
  `else // SCR1_DBG_EN
-    .exu2tdu_imon_i             (exu2tdu_i_mon         ),
+//tbr    .exu2tdu_imon_i             (exu2tdu_i_mon         ),
+    .exu2tdu_i_mon_vd       (exu2tdu_i_mon_vd     ),
+    .exu2tdu_i_mon_req      (exu2tdu_i_mon_req    ),
+    .exu2tdu_i_mon_addr     (exu2tdu_i_mon_addr   ),
  `endif // SCR1_DBG_EN
     .tdu2exu_ibrkpt_match_o     (tdu2exu_i_match       ),
     .tdu2exu_ibrkpt_exc_req_o   (tdu2exu_i_x_req       ),
@@ -665,9 +680,12 @@ assign hwbrk_dsbl               = (~dbg_en) | hdu_hwbrk_dsbl;
 //
 assign csr2tdu_req_qlfy         = dbg_en & csr2tdu_req & pipe2hdu_rdc_qlfy_i;
 //
-assign exu2tdu_i_mon_qlfy.vd    = exu2tdu_i_mon.vd & pipe2hdu_rdc_qlfy_i;
-assign exu2tdu_i_mon_qlfy.req   = exu2tdu_i_mon.req;
-assign exu2tdu_i_mon_qlfy.addr  = exu2tdu_i_mon.addr;
+
+//tbr assign exu2tdu_i_mon_qlfy       = pipe2hdu_rdc_qlfy_i ? exu2tdu_i_mon : '0;
+assign exu2tdu_i_mon_qlfy_vd    = pipe2hdu_rdc_qlfy_i ? exu2tdu_i_mon_vd   : '0;
+assign exu2tdu_i_mon_qlfy_req   = pipe2hdu_rdc_qlfy_i ? exu2tdu_i_mon_req  : '0;
+assign exu2tdu_i_mon_qlfy_addr  = pipe2hdu_rdc_qlfy_i ? exu2tdu_i_mon_addr : '0;
+
 assign lsu2tdu_d_mon_qlfy.vd    = lsu2tdu_d_mon.vd & pipe2hdu_rdc_qlfy_i;
 assign lsu2tdu_d_mon_qlfy.load  = lsu2tdu_d_mon.load;
 assign lsu2tdu_d_mon_qlfy.store = lsu2tdu_d_mon.store;

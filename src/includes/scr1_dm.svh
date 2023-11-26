@@ -10,13 +10,13 @@
 `include "scr1_hdu.svh"
 `include "scr1_csr.svh"
 
-parameter SCR1_DBG_DMI_ADDR_WIDTH                  = 6'd7;
-parameter SCR1_DBG_DMI_DATA_WIDTH                  = 6'd32;
-parameter SCR1_DBG_DMI_OP_WIDTH                    = 2'd2;
+parameter int SCR1_DBG_DMI_ADDR_WIDTH                  = 7;
+parameter int SCR1_DBG_DMI_DATA_WIDTH                  = 32;
+parameter int SCR1_DBG_DMI_OP_WIDTH                    = 2;
 
-parameter SCR1_DBG_DMI_CH_ID_WIDTH                 = 2'd2;
-parameter SCR1_DBG_DMI_DR_DTMCS_WIDTH              = 6'd32;
-parameter SCR1_DBG_DMI_DR_DMI_ACCESS_WIDTH         = SCR1_DBG_DMI_OP_WIDTH +
+parameter int SCR1_DBG_DMI_CH_ID_WIDTH                 = 2;
+parameter int SCR1_DBG_DMI_DR_DTMCS_WIDTH              = 32;
+parameter int SCR1_DBG_DMI_DR_DMI_ACCESS_WIDTH         = SCR1_DBG_DMI_OP_WIDTH +
                                                      SCR1_DBG_DMI_DATA_WIDTH +
                                                      SCR1_DBG_DMI_ADDR_WIDTH;
 

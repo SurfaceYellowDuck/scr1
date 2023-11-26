@@ -50,7 +50,10 @@ module scr1_pipe_tdu (
     output type_scr1_csr_resp_e                             tdu2csr_resp_o,             // CSR-TDU i/f response
 
     // TDU <-> EXU interface
-    input  type_scr1_brkm_instr_mon_s                       exu2tdu_imon_i,             // Instruction stream monitoring
+    //tbr    input  type_scr1_brkm_instr_mon_s                       exu2tdu_i_mon,      // Instruction stream monitoring
+    input  logic                                            exu2tdu_i_mon_vd,       // Instruction stream monitoring
+    input  logic                                            exu2tdu_i_mon_req,      // Instruction stream monitoring
+    input  logic [`SCR1_XLEN-1:0]                           exu2tdu_i_mon_addr,     // Instruction stream monitoring
     output logic [SCR1_TDU_ALLTRIG_NUM-1 : 0]               tdu2exu_ibrkpt_match_o,     // Instruction BP match
     output logic                                            tdu2exu_ibrkpt_exc_req_o,   // Instruction BP exception request
     input  logic [SCR1_TDU_ALLTRIG_NUM-1 : 0]               exu2tdu_bp_retire_i,        // Map of BPs being retired
@@ -360,10 +363,10 @@ always_ff @(negedge rst_n, posedge clk) begin
 end
 
 assign csr_icount_decr_en    = (~tdu_dsbl_i & csr_icount_m_ff)
-                             ? exu2tdu_imon_i.vd & (csr_icount_count_ff != 14'b0)
+                             ? exu2tdu_i_mon_vd & (csr_icount_count_ff != 14'b0)
                              : 1'b0;
-assign csr_icount_count_decr = exu2tdu_imon_i.req & csr_icount_decr_en & ~csr_icount_skip_ff;
-assign csr_icount_skip_dsbl  = exu2tdu_imon_i.req & csr_icount_decr_en & csr_icount_skip_ff;
+assign csr_icount_count_decr = exu2tdu_i_mon_req & csr_icount_decr_en & ~csr_icount_skip_ff;
+assign csr_icount_skip_dsbl  = exu2tdu_i_mon_req & csr_icount_decr_en & csr_icount_skip_ff;
 
 always_comb begin
     if (csr_icount_upd) begin
@@ -471,7 +474,7 @@ endgenerate // gblock_mtrig
 //------------------------------------------------------------------------------
 
 assign csr_icount_hit = ~tdu_dsbl_i & csr_icount_m_ff
-                      ? exu2tdu_imon_i.vd & (csr_icount_count_ff == 14'b1) & ~csr_icount_skip_ff
+                      ? exu2tdu_i_mon_vd & (csr_icount_count_ff == 14'b1) & ~csr_icount_skip_ff
                       : 1'b0;
 
 `ifndef SCR1_TDU_ICOUNT_EN
@@ -494,8 +497,8 @@ for (trig = 0; $unsigned(trig) < MTRIG_NUM; ++trig) begin : gblock_break_trig
 assign csr_mcontrol_exec_hit[trig] = ~tdu_dsbl_i
                                    & csr_mcontrol_m_ff[trig]
                                    & csr_mcontrol_exec_ff[trig]
-                                   & exu2tdu_imon_i.vd
-                                   & exu2tdu_imon_i.addr == csr_tdata2_ff[trig];
+                                   & exu2tdu_i_mon_vd
+                                   & exu2tdu_i_mon_addr == csr_tdata2_ff[trig];
 end
 endgenerate
 
@@ -549,9 +552,9 @@ end
 SVA_TDU_X_CONTROL : assert property (
     @(negedge clk) disable iff (~rst_n)
     !$isunknown({clk_en, tdu_dsbl_i, csr2tdu_req_i,
-                 exu2tdu_imon_i.vd, lsu2tdu_dmon_i.vd, exu2tdu_bp_retire_i})
+                 exu2tdu_i_mon_vd, exu2tdu_i_mon_vd, exu2tdu_bp_retire_i})
     ) else $error("TDU Error: control signals is X - %0b", {clk_en,
-    tdu_dsbl_i, csr2tdu_req_i, exu2tdu_imon_i.vd, lsu2tdu_dmon_i.vd, exu2tdu_bp_retire_i});
+    tdu_dsbl_i, csr2tdu_req_i, exu2tdu_i_mon_vd, exu2tdu_i_mon_vd, exu2tdu_bp_retire_i});
 
 SVA_DM_X_CLK_EN : assert property (
     @(negedge clk) disable iff (~rst_n)
@@ -570,7 +573,7 @@ SVA_DM_X_CSR2TDU_REQ : assert property (
 
 SVA_DM_X_I_MON_VD : assert property (
     @(negedge clk) disable iff (~rst_n)
-    !$isunknown(exu2tdu_imon_i.vd)
+    !$isunknown(exu2tdu_i_mon_vd)
     ) else $error("TDU Error: exu2tdu_imon_i.vd control signals is X");
 
 SVA_DM_X_D_MON_VD : assert property (
@@ -595,7 +598,7 @@ SVA_TDU_XW_CSR : assert property (
 
 SVA_TDU_X_IMON : assert property (
     @(negedge clk) disable iff (~rst_n)
-    exu2tdu_imon_i.vd |-> !$isunknown({exu2tdu_imon_i.req,exu2tdu_imon_i.addr})
+    exu2tdu_i_mon_vd |-> !$isunknown({exu2tdu_i_mon_req,exu2tdu_i_mon_addr})
     ) else $error("TDU Error: imonitor is X");
 
 SVA_TDU_X_DMON : assert property (
