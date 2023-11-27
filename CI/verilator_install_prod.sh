@@ -18,7 +18,7 @@ $(sudo wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies \
 --no-check-certificate 'https://docs.google.com/uc?export=download&id=1jfzv39PbU83shFZgbj0Zu1GUZzxfFPl5' -O- | sed -rn \
  's/.*confirm=([0-9A-Za-z_]+).*/\1/p')&id=1jfzv39PbU83shFZgbj0Zu1GUZzxfFPl5"\
  -O /usr/local/share/verilator.zip && sudo rm -rf /tmp/cookies.txt
-        unzip -d /usr/local/share /usr/local/share/verilator.zip 
-	rm /usr/local/share/verilator.zip
+	sudo unzip -d /usr/local/share /usr/local/share/verilator.zip 
+	sudo rm /usr/local/share/verilator.zip
 fi
 
