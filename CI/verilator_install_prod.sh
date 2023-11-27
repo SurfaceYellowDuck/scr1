@@ -10,6 +10,15 @@ $(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies \
  's/.*confirm=([0-9A-Za-z_]+).*/\n/p')&id=1M0mMx17I3bMi-3t-eNHsU5G9MjiTI9ww"\
  -O verilator_build.zip&& rm -rf /tmp/cookies.txt
 	unzip verilator_build.zip
-	rm -rf verilator_build.zip
+	rm  verilator_build.zip
+
+wget --load-cookies /tmp/cookies.txt \
+ "https://docs.google.com/uc?export=download&confirm=\
+$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies \
+--no-check-certificate 'https://docs.google.com/uc?export=download&id=1jfzv39PbU83shFZgbj0Zu1GUZzxfFPl5' -O- | sed -rn \
+ 's/.*confirm=([0-9A-Za-z_]+).*/\n/p')&id=1jfzv39PbU83shFZgbj0Zu1GUZzxfFPl5"\
+ -O verilator.zip&& rm -rf /tmp/cookies.txt
+	unzip verilator.zip
+	rm verilator.zip
 fi
 
