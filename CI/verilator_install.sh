@@ -8,7 +8,7 @@ if [[ ! -x "$(command -v verilator)" ]]; then
 	git checkout v5.014
 	autoconf
 	./configure
-	make
+	make -j $(nproc)
 	sudo make install
 	cd ..
 	rm -rf verilator
