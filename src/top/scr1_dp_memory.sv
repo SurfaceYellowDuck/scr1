@@ -65,6 +65,36 @@ always_ff @(posedge clk) begin
     qa <= memory_array[addra];
 end
 
+`elsif SCR1_TRGT_FPGA_GOWIN
+
+localparam int unsigned RAM_SIZE_WORDS = SCR1_SIZE/SCR1_NBYTES;
+
+//-------------------------------------------------------------------------------
+// Local signal declaration
+//-------------------------------------------------------------------------------
+(* ram_style = "block" *)  logic  [SCR1_WIDTH-1:0]  ram_block  [(RAM_SIZE_WORDS-1):0] /* synthesis syn_ramstyle = "block_ram" */;
+
+//FIXME here not supported bytes writing in dualport memory mode. Only words. 
+//-------------------------------------------------------------------------------
+// Port B memory behavioral description
+//-------------------------------------------------------------------------------
+always_ff @(posedge clk) begin
+    if (wenb) begin
+        ram_block[addrb] <= datab;
+    end
+    if(renb) begin
+        qb <= ram_block[addrb];
+    end
+end
+//-------------------------------------------------------------------------------
+// Port A memory behavioral description
+//-------------------------------------------------------------------------------
+always_ff @(posedge clk) begin 
+    if(rena) begin
+        qa <= ram_block[addra];
+    end
+end
+
 `else // SCR1_TRGT_FPGA_INTEL
 
 // CASE: OTHERS - SCR1_TRGT_FPGA_XILINX, SIMULATION, ASIC etc
