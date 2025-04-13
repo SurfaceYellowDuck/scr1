@@ -67,33 +67,101 @@ end
 
 `elsif SCR1_TRGT_FPGA_GOWIN
 
+`include "gowin_dpb.v"
 localparam int unsigned RAM_SIZE_WORDS = SCR1_SIZE/SCR1_NBYTES;
+logic [3:0] wenbb;
+assign wenbb = {4{wenb}} & webb;
 
-//-------------------------------------------------------------------------------
-// Local signal declaration
-//-------------------------------------------------------------------------------
-(* ram_style = "block" *)  logic  [SCR1_WIDTH-1:0]  ram_block  [(RAM_SIZE_WORDS-1):0] /* synthesis syn_ramstyle = "block_ram" */;
+logic [7:0] douta1;
+logic [7:0] douta2;
+logic [7:0] douta3;
+logic [7:0] douta4;
 
-//FIXME here not supported bytes writing in dualport memory mode. Only words. 
-//-------------------------------------------------------------------------------
-// Port B memory behavioral description
-//-------------------------------------------------------------------------------
-always_ff @(posedge clk) begin
-    if (wenb) begin
-        ram_block[addrb] <= datab;
-    end
-    if(renb) begin
-        qb <= ram_block[addrb];
-    end
-end
-//-------------------------------------------------------------------------------
-// Port A memory behavioral description
-//-------------------------------------------------------------------------------
-always_ff @(posedge clk) begin 
-    if(rena) begin
-        qa <= ram_block[addra];
-    end
-end
+logic [7:0] doutb1;
+logic [7:0] doutb2;
+logic [7:0] doutb3;
+logic [7:0] doutb4;
+
+logic [$clog2(SCR1_SIZE)-1:2] addr_mux_a;
+
+assign qa = {douta1, douta2, douta3, douta4};
+assign qb = {doutb1, doutb2, doutb3, doutb4};
+
+Gowin_DPB dpb1(
+        .douta(douta1), //output [7:0] douta
+        .doutb(doutb1), //output [7:0] doutb
+        .clka(clk), //input clka
+        .ocea(), //input ocea
+        .cea('1), //input cea
+        .reseta(), //input reseta
+        .wrea(), //input wrea
+        .clkb(clk), //input clkb
+        .oceb(), //input oceb
+        .ceb('1), //input ceb
+        .resetb(), //input resetb
+        .wreb(wenbb[0]), //input wreb
+        .ada(addra), //input [15:0] ada
+        .dina(), //input [7:0] dina
+        .adb(addrb), //input [15:0] adb
+        .dinb(datab[24+:8]) //input [7:0] dinb
+    );
+
+Gowin_DPB dpb2(
+        .douta(douta2), //output [7:0] douta
+        .doutb(doutb2), //output [7:0] doutb
+        .clka(clk), //input clka
+        .ocea(), //input ocea
+        .cea('1), //input cea
+        .reseta(), //input reseta
+        .wrea(), //input wrea
+        .clkb(clk), //input clkb
+        .oceb(), //input oceb
+        .ceb('1), //input ceb
+        .resetb(), //input resetb
+        .wreb(wenbb[1]), //input wreb
+        .ada(addra), //input [15:0] ada
+        .dina(), //input [7:0] dina
+        .adb(addrb), //input [15:0] adb
+        .dinb(datab[16+:8]) //input [7:0] dinb
+    );
+
+Gowin_DPB dpb3(
+        .douta(douta3), //output [7:0] douta
+        .doutb(doutb3), //output [7:0] doutb
+        .clka(clk), //input clka
+        .ocea(), //input ocea
+        .cea('1), //input cea
+        .reseta(), //input reseta
+        .wrea(), //input wrea
+        .clkb(clk), //input clkb
+        .oceb(), //input oceb
+        .ceb('1), //input ceb
+        .resetb(), //input resetb
+        .wreb(wenbb[2]), //input wreb
+        .ada(addra), //input [15:0] ada
+        .dina(), //input [7:0] dina
+        .adb(addrb), //input [15:0] adb
+        .dinb(datab[8+:8]) //input [7:0] dinb
+    );
+
+Gowin_DPB dpb4(
+        .douta(douta4), //output [7:0] douta
+        .doutb(doutb4), //output [7:0] doutb
+        .clka(clk), //input clka
+        .ocea(), //input ocea
+        .cea('1), //input cea
+        .reseta(), //input reseta
+        .wrea(), //input wrea
+        .clkb(clk), //input clkb
+        .oceb(), //input oceb
+        .ceb('1), //input ceb
+        .resetb(), //input resetb
+        .wreb(wenbb[3]), //input wreb
+        .ada(addra), //input [15:0] ada
+        .dina(), //input [7:0] dina
+        .adb(addrb), //input [15:0] adb
+        .dinb(datab[0+:8]) //input [7:0] dinb
+    );
 
 `else // SCR1_TRGT_FPGA_INTEL
 
