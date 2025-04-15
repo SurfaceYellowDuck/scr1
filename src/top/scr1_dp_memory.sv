@@ -82,10 +82,8 @@ logic [7:0] doutb2;
 logic [7:0] doutb3;
 logic [7:0] doutb4;
 
-logic [$clog2(SCR1_SIZE)-1:2] addr_mux_a;
-
-assign qa = {douta1, douta2, douta3, douta4};
-assign qb = {doutb1, doutb2, doutb3, doutb4};
+assign qa = {douta4, douta3, douta2, douta1};
+assign qb = {doutb4, doutb3, doutb2, doutb1};
 
 Gowin_DPB dpb1(
         .douta(douta1), //output [7:0] douta
@@ -103,7 +101,7 @@ Gowin_DPB dpb1(
         .ada(addra), //input [15:0] ada
         .dina(), //input [7:0] dina
         .adb(addrb), //input [15:0] adb
-        .dinb(datab[24+:8]) //input [7:0] dinb
+        .dinb(datab[0+:8]) //input [7:0] dinb
     );
 
 Gowin_DPB dpb2(
@@ -122,7 +120,7 @@ Gowin_DPB dpb2(
         .ada(addra), //input [15:0] ada
         .dina(), //input [7:0] dina
         .adb(addrb), //input [15:0] adb
-        .dinb(datab[16+:8]) //input [7:0] dinb
+        .dinb(datab[8+:8]) //input [7:0] dinb
     );
 
 Gowin_DPB dpb3(
@@ -141,7 +139,7 @@ Gowin_DPB dpb3(
         .ada(addra), //input [15:0] ada
         .dina(), //input [7:0] dina
         .adb(addrb), //input [15:0] adb
-        .dinb(datab[8+:8]) //input [7:0] dinb
+        .dinb(datab[16+:8]) //input [7:0] dinb
     );
 
 Gowin_DPB dpb4(
@@ -160,7 +158,7 @@ Gowin_DPB dpb4(
         .ada(addra), //input [15:0] ada
         .dina(), //input [7:0] dina
         .adb(addrb), //input [15:0] adb
-        .dinb(datab[0+:8]) //input [7:0] dinb
+        .dinb(datab[24+:8]) //input [7:0] dinb
     );
 
 `else // SCR1_TRGT_FPGA_INTEL
